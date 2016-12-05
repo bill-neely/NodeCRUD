@@ -1,0 +1,27 @@
+{
+  "name": "nodecrud",
+  "version": "1.0.0",
+  "description": "Node Express Tutorial",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bill-neely/NodeCRUD.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bill-neely/NodeCRUD/issues"
+  },
+  "homepage": "https://github.com/bill-neely/NodeCRUD#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongodb": "^2.2.12"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

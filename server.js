@@ -42,9 +42,21 @@ app.put('/quotes', (req, res) => {
 			}
 		}, {
 			sort: {_id: -1},
-			upsert: false
+			upsert: true
 		}, (err, result) => {
 			if (err) return res.send(err)
 			res.send(result)
+		})
+})
+
+app.delete('/quotes', (req, res) => {
+	db.collection('quotes')
+		.findOneAndDelete({name: 'Darth Vadar'}, {
+			$set: {
+				name: req.body.name
+			}
+		}, (err, result) => {
+			if (err) return res.send(500, err)
+			res.send('A Darth Vadar quote was deleted')
 		})
 })

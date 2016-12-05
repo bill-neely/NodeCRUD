@@ -6,6 +6,8 @@ const MongoClient = require('mongodb').MongoClient
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
+app.use(express.static('public'))
+app.use(bodyParser.json())
 
 MongoClient.connect('mongodb://bill:652IcDFOy@ds119788.mlab.com:19788/nodecrud', (err, database) => {
 	if (err) return console.log(err);
@@ -29,4 +31,20 @@ app.post('/quotes', (req, res) => {
 		console.log('saved to database');
 		res.redirect('/');
 	})
+})
+
+app.put('/quotes', (req, res) => {
+	db.collection('quotes')
+		.findOneAndUpdate({name: 'Yoda'}, {
+			$set: { 
+				name: req.body.name,
+				quote: req.body.quote
+			}
+		}, {
+			sort: {_id: -1},
+			upsert: false
+		}, (err, result) => {
+			if (err) return res.send(err)
+			res.send(result)
+		})
 })

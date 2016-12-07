@@ -2,7 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const MongoClient = require('mongodb').MongoClient
-
+const ObjectID = require('mongodb').ObjectID
+const common = require('./common')
+const quote = require('./quote')
+//var db = common.openDB();
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.set('view engine', 'ejs')
@@ -17,6 +20,10 @@ MongoClient.connect('mongodb://bill:652IcDFOy@ds119788.mlab.com:19788/nodecrud',
 	})
 })
 
+app.get('/nice', (req, res) => {
+	res.send(common.getData());
+})
+
 app.get('/', (req, res) => {
 	db.collection('quotes').find().toArray((err, result) => {
 		if (err) return console.log(err);
@@ -24,11 +31,33 @@ app.get('/', (req, res) => {
 	})
 })
 
+app.get('/api/quote/:id', (req, res) => {
+	var id = req.params['id'];
+	var parms = {'_id': new ObjectID(id)};
+	db.collection('quotes').find(parms).toArray((err, result) => {
+		if (err) res.render(err);
+		res.json(result);
+	})
+})
+
+app.get('/api/quote/', (req, res) => {
+	var parms = {};
+	console.log(db);
+	var result = quote.getQuote(db, parms);
+	console.log(result)
+	res.json(result);
+	//db.collection('quotes').find(parms).toArray((err, result) => {
+	//	if (err) res.render(err);
+	//	res.json(result);
+	//})
+})
+
 
 app.post('/quotes', (req, res) => {
 	db.collection('quotes').save(req.body, (err, result) => {
 		if (err) return console.log(err);
 		console.log('saved to database');
+		console.log(db);
 		res.redirect('/');
 	})
 })
